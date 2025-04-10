@@ -1,54 +1,6 @@
 import tkinter as tk
-import random
 import math
-
-n1, n2, n3, n4 = 4, 1, 3, 3
-n = n3 + 10
-seed = int(f"{n1}{n2}{n3}{n4}")  # 4133
-k = 1.0 - n3 * 0.02 - n4 * 0.005 - 0.25
-
-random.seed(seed)
-Adir = []
-for i in range(n):
-    row = []
-    for j in range(n):
-        value = random.uniform(0, 2.0) * k
-        row.append(1 if value >= 1.0 else 0)
-    Adir.append(row)
-
-Aundir = [[0] * n for _ in range(n)]
-for i in range(n):
-    for j in range(n):
-        Aundir[i][j] = Aundir[j][i] = max(Adir[i][j], Adir[j][i])
-
-print("Матриця напрямленого графа:")
-for row in Adir:
-    print(" ".join(map(str, row)))
-
-print("\nМатриця ненапрямленого графа:")
-for row in Aundir:
-    print(" ".join(map(str, row)))
-
-def get_frame_positions(n, offset_x, offset_y, spacing_x, spacing_y):
-    cols, rows = 5, 4
-    positions = []
-
-    for col in range(cols):
-        if len(positions) < n:
-            positions.append((offset_x + col * spacing_x, offset_y))
-
-    for row in range(1, rows - 1):
-        if len(positions) < n:
-            positions.append((offset_x + (cols - 1) * spacing_x, offset_y + row * spacing_y))
-
-    for col in reversed(range(cols)):
-        if len(positions) < n:
-            positions.append((offset_x + col * spacing_x, offset_y + (rows - 1) * spacing_y))
-
-    for row in reversed(range(1, rows - 1)):
-        if len(positions) < n:
-            positions.append((offset_x, offset_y + row * spacing_y))
-    return positions
+from position import get_frame_positions
 
 def intersects_vertex(p1, p2, center, r):
     x0, y0 = center
@@ -66,7 +18,7 @@ def intersects_vertex(p1, p2, center, r):
     t2 = (-b - sqrt_disc) / (2 * a)
     return (0 < t1 < 1) or (0 < t2 < 1)
 
-def draw_graph(canvas, matrix, directed, offset_x=0):
+def draw_graph(canvas, matrix, directed, n, offset_x=0):
     vertex_radius = 20
     positions = get_frame_positions(n, offset_x=100 + offset_x, offset_y=100, spacing_x=120, spacing_y=100)
 
@@ -158,16 +110,3 @@ def draw_graph(canvas, matrix, directed, offset_x=0):
                     canvas.create_line(start_x, start_y, end_x, end_y,
                                        width=2,
                                        arrow=(tk.LAST if directed else None))
-
-root = tk.Tk()
-root.title("Графи")
-canvas = tk.Canvas(root, width=1300, height=600, bg="white")
-canvas.pack()
-
-draw_graph(canvas, Adir, directed=True, offset_x=0)
-draw_graph(canvas, Aundir, directed=False, offset_x=650)
-
-canvas.create_text(325, 20, text="Напрямлений граф", font=("Arial", 14, "bold"))
-canvas.create_text(975, 20, text="Ненапрямлений граф", font=("Arial", 14, "bold"))
-
-root.mainloop()
