@@ -21,7 +21,6 @@ for i in range(n):
     for j in range(n):
         Aundir[i][j] = Aundir[j][i] = max(Adir[i][j], Adir[j][i])
 
-# === Вивід матриць ===
 print("Матриця напрямленого графа:")
 for row in Adir:
     print(" ".join(map(str, row)))
