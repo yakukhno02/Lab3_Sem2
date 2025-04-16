@@ -97,7 +97,6 @@ def draw_graph(canvas, matrix, directed, n, offset_x=0):
                 is_bidirectional = directed and matrix[i][j] and matrix[j][i]
 
                 if is_bidirectional and i > j:
-                    # Це друге ребро в парі (буде вигнутим)
                     offset = 40
                     while True:
                         mx, my = get_bent_line_point(start_x, start_y, end_x, end_y, offset)
@@ -113,7 +112,6 @@ def draw_graph(canvas, matrix, directed, n, offset_x=0):
                                        smooth=True, splinesteps=36)
 
                 elif blocked:
-                    # Якщо пряма стрілка перетинає вершину — робимо її вигнутою
                     offset = 40
                     while True:
                         mx, my = get_bent_line_point(start_x, start_y, end_x, end_y, offset)
@@ -129,7 +127,6 @@ def draw_graph(canvas, matrix, directed, n, offset_x=0):
                                        smooth=True, splinesteps=36)
 
                 else:
-                    # Звичайна пряма стрілка
                     canvas.create_line(start_x, start_y, end_x, end_y,
                                        width=2,
                                        arrow=(tk.LAST if directed else None))
@@ -147,7 +144,6 @@ def get_bent_line_point(x1, y1, x2, y2, offset, direction=1):
     return mx, my
 
 def is_bent_line_clear(x1, y1, x2, y2, mx, my, positions, skip_indices, radius):
-    # Перевіряє, чи крива не проходить через інші вершини
     steps = 20
     for t in [i / steps for i in range(steps + 1)]:
         xt = (1 - t)**2 * x1 + 2 * (1 - t) * t * mx + t**2 * x2
