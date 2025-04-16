@@ -2,8 +2,17 @@ import tkinter as tk
 from graph_generator import generate_adjacency_matrices
 from drawGraph import draw_graph
 
+
 n1, n2, n3, n4 = 4, 1, 3, 3
 Adir, Aundir, n = generate_adjacency_matrices(n1, n2, n3, n4)
+
+print("Матриця для напрямленого графа:")
+for row in Adir:
+    print(" ".join(map(str, row)))
+
+print("\nМатриця для ненапрямленого графа:")
+for row in Aundir:
+    print(" ".join(map(str, row)))
 
 root = tk.Tk()
 root.title("Графи")
